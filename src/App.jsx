@@ -1,7 +1,8 @@
 import "./App.css";
 import io from "socket.io-client";
 import { useState } from "react";
-import Chat from "./Chat";
+import Chat from "./components/Chat";
+import Notifications from './components/Notifications'
 
 const socket = io.connect("http://localhost:3001");
 
@@ -12,12 +13,17 @@ function App() {
 
     const joinRoom = () => {
         if (username !== "" && room !== "") {
-            socket.emit("join_room", room);
+            const data={
+                author: username,
+                room: room
+            }
+            socket.emit("join_room", data);
             setShowChat(true)
         }
     };
     return (
         <div className="App">
+        <Notifications socket={socket}/>
             {!showChat ? (
                 <div className="joinChatContainer">
                     <h3>Join A Chat</h3>
